@@ -298,11 +298,6 @@ func _update_graph() -> void:
 	var area_width = size.x - margin_left - _MARGIN_RIGHT
 	var hor_grad_step_px = area_width / (hor_grad_number -1)
 	
-	# TODO : c'est dans les for suivants que sont etabils les liste de lignes
-	# et de nombres a inscrir. Il faudrait changer la logique du truc, 
-	# au lieu de calculer le nombre de division puis de boucler dessus avec un
-	# for, il faudrait trouver la position de la premiere division, puis 
-	# boucler jusqua ce qu on sorte de la zone de graphique
 	var vert_grad: Array
 	var hor_grid: Array
 	var grad_px: Vector2
