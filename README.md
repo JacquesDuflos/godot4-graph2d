@@ -6,14 +6,12 @@ This repository contains the add-on and examples.
 
 ## Fork
 
-This fork is made to add the option of choosing freely the min and max of the axis.
-A boolean export value, named "rounded_number_of_steps_x", will be added to the graph object for each axis. If set to
-true, the behaviour will stay the same as the main add-on, except for it will print to the consol an explanation.
-If set to false, the min and max of the axix will be such as specified by the user.
-By default, this value will be set to true for the y axis, and to false for the x axis as it is commun to put the
-real-time as x axis.
+This fork adds the option of choosing if the min and max of each axis are recalculated or if they stay such as the user specified.
+- option recalculated : generally used when the graph axis will not be modified dynamically. It ensures that the grid spacing corresponds to the dimension of the graph. It prevents the space between the axis and the first grid line to be a fraction of the step of the grid.
+- option "as is" : usefull to pan through the graph. A classic use is to make the x axis scroll with the time and draw a graph in real time.
 
-An example will be added where the x axis represent the las 5 seconds, and the y axis represent the value of a slider.
+Usage : tick or untick the "rounded_number_of_steps_x" or "rounded_number_of_steps_y" in the graph export variables. Then adjust the x and y min and max values.
+
 
 ## Features
 
