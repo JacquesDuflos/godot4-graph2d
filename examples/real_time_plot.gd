@@ -6,13 +6,14 @@ var plot : PlotItem
 var t : float
 const DT = 5.0
 
-# Called when the node enters the scene tree for the first time.
+# Creating a plot item and initialising the time variable
 func _ready() -> void:
 	plot = graph_2d.add_plot_item("slider", Color.BURLYWOOD,1)
 	t = 0
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# At every frame, add a point to the graph, update the time variable and the
+# range of the graf's x axis
 func _process(delta: float) -> void:
 	plot.add_point(Vector2(t,v_slider.value))
 	t += delta
