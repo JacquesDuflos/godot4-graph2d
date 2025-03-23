@@ -324,13 +324,13 @@ func _update_graph() -> void:
 				grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
 				hor_grid.append(grid_px)
 	else :
-		vert_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
+		vert_grad.append([Vector2(margin_left,_MARGIN_TOP), ""])
 		var curser_y = (floor(y_min/y_step)+1)*y_step
 		while curser_y <= y_max:
 			var grad: Array = []
 			grad_px.y = remap(curser_y,
 				y_min, y_max,
-				margin_bottom + area_height, margin_bottom)
+				_MARGIN_TOP + area_height, _MARGIN_TOP)
 			grad.append(grad_px)
 			grad.append("%0.1f" % curser_y)
 			vert_grad.append(grad)
@@ -340,7 +340,7 @@ func _update_graph() -> void:
 				grid_px.append(grad_px)
 				grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
 				hor_grid.append(grid_px)
-		vert_grad.append([Vector2(margin_left,_MARGIN_TOP), ""])
+		vert_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
 	get_node("Axis").vert_grad = vert_grad
 	
 	if grid_horizontal_visible:
