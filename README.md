@@ -11,7 +11,7 @@ This fork adds the option of choosing if the min and max of each axis are recalc
 - option "as is" : usefull to pan through the graph. A classic use is to make the x axis scroll with the time and draw a graph in real time.
 
 Usage : tick or untick the "rounded_number_of_steps_x" or "rounded_number_of_steps_y" in the graph export variables. Then adjust the x and y min and max values.
-
+![some alternative text](screenshots/Graph2DRealTimePloting.mp4)
 
 ## Features
 
