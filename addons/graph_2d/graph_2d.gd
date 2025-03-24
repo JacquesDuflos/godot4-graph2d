@@ -136,6 +136,8 @@ var _plots: Array
 var _x_step: float
 var _y_step: float
 
+signal legend_updated
+
 #endregion
 
 func _ready():
@@ -334,6 +336,7 @@ func _update_legend() -> void:
 			color = p.color,
 		})
 	get_node("PlotArea/Legend").update(labels)
+	legend_updated.emit(labels)
 
 func _on_Graph_resized() -> void:
 	_update_graph()
