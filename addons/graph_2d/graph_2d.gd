@@ -95,7 +95,7 @@ extends Control
 	set(value):
 		show_legend = value
 ## Background color of graph
-@export var background_color = Color.BLACK:
+@export var background_color := Color.BLACK:
 	set(value):
 		background_color = value
 		if get_node_or_null("Background"):

@@ -47,6 +47,7 @@ offset_bottom = 59.0
 text = "Remove All Plots"
 
 [node name="FlowtingLegend" type="Control" parent="." node_paths=PackedStringArray("graph")]
+layout_mode = 1
 anchors_preset = 0
 offset_left = 88.0
 offset_top = 124.0

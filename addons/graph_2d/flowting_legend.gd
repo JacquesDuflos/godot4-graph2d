@@ -15,12 +15,12 @@ func _ready() -> void:
 		graph.legend_updated.connect(_on_graph_legend_updated)
 		backgrnound = ColorRect.new()
 		backgrnound.layout_mode = 1
-		backgrnound.anchors_preset = 15
+		backgrnound.anchors_preset = Control.PRESET_FULL_RECT
 		backgrnound.color = graph.background_color
 		add_child(backgrnound)
 		move_child(backgrnound,0)
 	else :
 		printerr("No graph declared for the flowting legend node")
 
-func _on_graph_legend_updated(labels):
+func _on_graph_legend_updated(labels:Array):
 	legend.update(labels)
