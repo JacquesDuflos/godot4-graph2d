@@ -24,6 +24,7 @@ x_label = "Time(s)"
 y_min = -53.0
 y_max = 50.0
 y_label = "Y"
+show_legend = null
 background_color = Color(0.0941176, 0.227451, 0.4, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true

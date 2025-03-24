@@ -90,6 +90,10 @@ extends Control
 		_update_graph()
 		
 @export_group("Background")
+## Show legend on graph
+@export var show_legend := true:
+	set(value):
+		show_legend = value
 ## Background color of graph
 @export var background_color = Color.BLACK:
 	set(value):
@@ -335,7 +339,10 @@ func _update_legend() -> void:
 			name = p.label,
 			color = p.color,
 		})
-	get_node("PlotArea/Legend").update(labels)
+	if show_legend:
+		get_node("PlotArea/Legend").update(labels)
+	else :
+		get_node("PlotArea/Legend").update([])
 	legend_updated.emit(labels)
 
 func _on_Graph_resized() -> void:

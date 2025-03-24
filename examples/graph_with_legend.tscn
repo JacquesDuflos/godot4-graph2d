@@ -50,8 +50,8 @@ text = "Remove All Plots"
 anchors_preset = 0
 offset_left = 88.0
 offset_top = 124.0
-offset_right = 252.0
-offset_bottom = 375.0
+offset_right = 228.0
+offset_bottom = 246.0
 script = ExtResource("3_7par3")
 graph = NodePath("../Graph2D")
 

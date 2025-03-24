@@ -39,6 +39,7 @@ func _init(obj, l, c, w):
 	label = l
 	_curve.name = l
 	_curve.color = c
+	color = c
 	_curve.width = w
 	_graph.get_node("PlotArea").add_child(_curve)
 
