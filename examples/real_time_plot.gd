@@ -8,7 +8,7 @@ const DT = 5.0
 
 # Creating a plot item and initialising the time variable
 func _ready() -> void:
-	plot = graph_2d.add_plot_item("slider", Color.BURLYWOOD,1)
+	plot = graph_2d.add_plot_item("slider", Color.BURLYWOOD,1, false)
 	t = 0
 
 
