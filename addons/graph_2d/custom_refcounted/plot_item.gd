@@ -26,32 +26,28 @@ var thickness: float = 1.0:
 		if value > 0.0:
 			thickness = value
 			_curve.width = thickness
-		
-var _curve
+
+var _curve : Plot2D
 var _LineCurve = preload("res://addons/graph_2d/custom_nodes/plot_2d.gd")
 var _points: PackedVector2Array
 var _graph
 
 
-func _init(obj, l, c, w):
+func _init(obj, l, c, w, a):
 	_curve = _LineCurve.new()
 	_graph = obj
 	label = l
 	_curve.name = l
 	_curve.color = c
 	_curve.width = w
+	_curve.with_area = a
 	_graph.get_node("PlotArea").add_child(_curve)
 
 
 ## Add point to plot
 func add_point(pt: Vector2):
 	_points.append(pt)
-	var point = pt.clamp(Vector2(_graph.x_min, _graph.y_min), Vector2(_graph.x_max, _graph.y_max))
-	var pt_px: Vector2
-	pt_px.x = remap(point.x, _graph.x_min, _graph.x_max, 0, _graph.get_node("PlotArea").size.x)
-	pt_px.y = remap(point.y, _graph.y_min, _graph.y_max, _graph.get_node("PlotArea").size.y, 0)
-	_curve.points_px.append(pt_px)
-	_curve.queue_redraw()
+	_redraw()
 
 
 ## Remove point from plot
@@ -83,12 +79,33 @@ func delete():
 
 func _redraw():
 	_curve.points_px.clear()
+	var leftmost_point : Vector2
+	var rightmost_point : Vector2
 	for pt in _points:
 #			print_debug("Plot redraw %s" % pt)
 		if pt.x > _graph.x_max or pt.x < _graph.x_min: continue
+		
 		var point = pt.clamp(Vector2(_graph.x_min, _graph.y_min), Vector2(_graph.x_max, _graph.y_max))
 		var pt_px: Vector2
 		pt_px.x = remap(point.x, _graph.x_min, _graph.x_max, 0, _graph.get_node("PlotArea").size.x)
 		pt_px.y = remap(point.y, _graph.y_min, _graph.y_max, _graph.get_node("PlotArea").size.y, 0)
+		if leftmost_point:
+			if pt_px.x < leftmost_point.x :
+				leftmost_point = pt_px
+		else :
+			leftmost_point = pt_px
+		if rightmost_point:
+			if pt_px.x > rightmost_point.x :
+				rightmost_point = pt_px
+		else :
+			rightmost_point = pt_px
 		_curve.points_px.append(pt_px)
+	#print("left most point : ", leftmost_point)
+	#print("right most point : ", rightmost_point)
+	var y0_px : float
+	y0_px = remap (0, _graph.y_min, _graph.y_max, _graph.get_node("PlotArea").size.y, 0)
+	y0_px = clamp(y0_px, 0, _graph.get_node("PlotArea").size.y)
+	_curve.perimeter_px = _curve.points_px.duplicate()
+	_curve.perimeter_px.append(Vector2(rightmost_point.x,y0_px))
+	_curve.perimeter_px.append(Vector2(leftmost_point.x,y0_px))
 	_curve.queue_redraw()

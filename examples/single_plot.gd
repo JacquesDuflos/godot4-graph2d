@@ -4,7 +4,8 @@ func _on_add_plot_pressed() -> void:
 	var my_plot = $Graph2D.add_plot_item(
 			"Plot %d" % [$Graph2D.count()],
 			[Color.RED, Color.GREEN, Color.BLUE][$Graph2D.count() % 3],
-			[1.0, 3.0, 5.0].pick_random()
+			[1.0, 3.0, 5.0].pick_random(),
+			true
 			)
 
 	for x in range(0, 11, 1):
