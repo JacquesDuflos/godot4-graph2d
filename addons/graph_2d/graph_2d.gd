@@ -10,12 +10,22 @@ extends Control
 #region Export variables
 
 @export_group("X Axis")
+## Rounds the X extrema to guarentee a rounded number of steps and alined to 
+## the y axis
+@export var rounded_number_of_steps_x := false:
+	set(value):
+		rounded_number_of_steps_x = value
+		x_min = x_min
+		x_max = x_max
 ## Minimun value on X-axis
 @export var x_min: float = 0.0:
 	set(value):
 		if value < x_max:
 			_x_step = _get_min_step(value, x_max)
-			x_min = _get_min_value(value, x_max, _x_step)
+			if rounded_number_of_steps_x:
+				x_min = _get_min_value(value, x_max, _x_step)
+			else :
+				x_min = value
 			_update_graph()
 			_update_plots()
 ## Maximum value on X-axis
@@ -23,7 +33,10 @@ extends Control
 	set(value):
 		if value > x_min:
 			_x_step = _get_min_step(x_min, value)
-			x_max = _get_max_value(x_min, value, _x_step)
+			if rounded_number_of_steps_x:
+				x_max = _get_max_value(x_min, value, _x_step)
+			else :
+				x_max = value
 			_update_graph()
 			_update_plots()
 ## Label of X-axis
@@ -48,13 +61,23 @@ extends Control
 		_update_graph()
 
 @export_group("Y Axis")
+## Rounds the Y extrema to guarentee a rounded number of steps and alined to 
+## the x axis
+@export var rounded_number_of_steps_y := true:
+	set(value):
+		rounded_number_of_steps_y = value
+		y_min = y_min
+		y_max = y_max
 ## Minimun value on Y-axis
 @export var y_min = 0.0:
 	set(value):
 		if value < y_max:
 			_y_step = _get_min_step(value, y_max)
 #			print_debug("y step: ", y_step)
-			y_min = _get_min_value(value, y_max, _y_step)
+			if rounded_number_of_steps_y:
+				y_min = _get_min_value(value, y_max, _y_step)
+			else :
+				y_min = value
 #			print_debug("y_min: ", y_min)
 			_update_graph()
 			_update_plots()
@@ -63,7 +86,10 @@ extends Control
 	set(value):
 		if value > y_min:
 			_y_step = _get_min_step(y_min, value)
-			y_max = _get_max_value(y_min, value, _y_step)
+			if rounded_number_of_steps_y:
+				y_max = _get_max_value(y_min, value, _y_step)
+			else :
+				y_max = value
 #			print_debug("y_max: ", y_max)
 			_update_graph()
 			_update_plots()
@@ -250,17 +276,25 @@ func _update_graph() -> void:
 	get_node("PlotArea").offset_bottom = -margin_bottom
 	
 	# Vertical Graduation
-	var y_step = _get_min_step(y_min, y_max)
+	var y_axis_range: float = y_max - y_min
+	
+	var y_step : float
+	y_step = _get_min_step(y_min, y_max)
+	if rounded_number_of_steps_y :
+		y_step *= int(y_axis_range / y_step/10)
 	assert(not is_inf(y_step), "y_step is infinite!")
 
-	var y_axis_range: float = y_max - y_min
 	var vert_grad_number = _get_graduation_num(y_min, y_max, y_step, "vert")
 	
 	# Horizontal Graduation
-	var x_step = _get_min_step(x_min, x_max)
-	assert(not is_inf(x_step), "y_step is infinite!")
-	
 	var x_axis_range: float = x_max - x_min
+	
+	var x_step : float
+	x_step = _get_min_step(x_min, x_max)
+	if not rounded_number_of_steps_x :
+		x_step *= int(x_axis_range / x_step/10)
+	assert(not is_inf(x_step), "x_step is infinite!")
+	
 	var hor_grad_number = _get_graduation_num(x_min, x_max, x_step, "hor")
 	
 	# Plot area height in pixel
@@ -275,21 +309,39 @@ func _update_graph() -> void:
 	var grad_px: Vector2
 	grad_px.x = margin_left
 	# Draw grid number
-	for n in range(vert_grad_number):
-		var grad: Array = []
-		grad_px.y = _MARGIN_TOP + n * vert_grad_step_px
-		grad.append(grad_px)
-		var grad_text = "%0.1f" % (float(y_max) - n * float(y_axis_range)/(vert_grad_number-1))
-		grad.append(grad_text)
-		vert_grad.append(grad)
-		
-		# Horizontal grid
-		if grid_horizontal_visible:
-			var grid_px: PackedVector2Array
-			grid_px.append(grad_px)
-			grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
-			hor_grid.append(grid_px)
+	if rounded_number_of_steps_y:
+		for n in range(vert_grad_number):
+			var grad: Array = []
+			grad_px.y = _MARGIN_TOP + n * vert_grad_step_px
+			grad.append(grad_px)
+			var grad_text = "%0.1f" % (float(y_max) - n * float(y_axis_range)/(vert_grad_number-1))
+			grad.append(grad_text)
+			vert_grad.append(grad)
 			
+			# Horizontal grid
+			if grid_horizontal_visible:
+				var grid_px: PackedVector2Array
+				grid_px.append(grad_px)
+				grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
+				hor_grid.append(grid_px)
+	else :
+		vert_grad.append([Vector2(margin_left,_MARGIN_TOP), ""])
+		var curser_y = (floor(y_min/y_step)+1)*y_step
+		while curser_y <= y_max:
+			var grad: Array = []
+			grad_px.y = remap(curser_y,
+				y_min, y_max,
+				_MARGIN_TOP + area_height, _MARGIN_TOP)
+			grad.append(grad_px)
+			grad.append("%0.1f" % curser_y)
+			vert_grad.append(grad)
+			curser_y += y_step 
+			if grid_horizontal_visible:
+				var grid_px: PackedVector2Array
+				grid_px.append(grad_px)
+				grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
+				hor_grid.append(grid_px)
+		vert_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
 	get_node("Axis").vert_grad = vert_grad
 	
 	if grid_horizontal_visible:
@@ -301,22 +353,41 @@ func _update_graph() -> void:
 	var vert_grid: Array
 	grad_px = Vector2()
 	grad_px.y = _MARGIN_TOP + area_height
+		
+	if rounded_number_of_steps_x:
+		for n in range(hor_grad_number):
+			var grad: Array = []
+			grad_px.x = margin_left + n * hor_grad_step_px
+			grad.append(grad_px)
+			var grad_text = "%0.1f" % (float(x_min) + n * float(x_axis_range)/(hor_grad_number-1))
+			grad.append(grad_text)
+			hor_grad.append(grad)
+			
+			# Vertical grid
+			if grid_vertical_visible:
+				var grid_px: PackedVector2Array
+				grid_px.append(grad_px)
+				grid_px.append(Vector2(grad_px.x, grad_px.y - area_height))
+				vert_grid.append(grid_px)
+	else :
+		hor_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
+		var curser_x = (floor(x_min/x_step)+1)*x_step
+		while curser_x <= x_max:
+			var grad: Array = []
+			grad_px.x = remap(curser_x,
+				x_min, x_max,
+				margin_left, margin_left+area_width)
+			grad.append(grad_px)
+			grad.append("%0.1f" % curser_x)
+			hor_grad.append(grad)
+			curser_x += x_step 
+			if grid_vertical_visible:
+				var grid_px : PackedVector2Array
+				grid_px.append(grad_px)
+				grid_px.append(Vector2(grad_px.x, grad_px.y - area_height))
+				vert_grid.append(grid_px)
+		hor_grad.append([Vector2(margin_left+area_width,_MARGIN_TOP + area_height), ""])
 	
-	for n in range(hor_grad_number):
-		var grad: Array = []
-		grad_px.x = margin_left + n * hor_grad_step_px
-		grad.append(grad_px)
-		var grad_text = "%0.1f" % (float(x_min) + n * float(x_axis_range)/(hor_grad_number-1))
-		grad.append(grad_text)
-		hor_grad.append(grad)
-		
-		# Vertical grid
-		if grid_vertical_visible:
-			var grid_px: PackedVector2Array
-			grid_px.append(grad_px)
-			grid_px.append(Vector2(grad_px.x, grad_px.y - area_height))
-			vert_grid.append(grid_px)
-		
 	get_node("Axis").hor_grad = hor_grad
 	
 	if grid_vertical_visible:
@@ -355,7 +426,7 @@ func _on_plot_area_resized() -> void:
 func _get_min_step(value_min, value_max):
 	var range_log: int = int(_log10(value_max - value_min))
 	var step: float = 10.0**(range_log-1)
-#	print("min step: %f " % [step])
+	#print("min step: %f " % [step])
 	return step
 
 func _get_graduation_num(value_min, value_max, step, orientation) -> int:
