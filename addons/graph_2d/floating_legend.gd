@@ -1,6 +1,6 @@
 @tool
 extends Control
-class_name FlowtingLegend
+class_name FloatingLegend
 
 @export var graph : Graph2D
 
@@ -20,7 +20,7 @@ func _ready() -> void:
 		add_child(backgrnound)
 		move_child(backgrnound,0)
 	else :
-		printerr("No graph declared for the flowting legend node")
+		printerr("No graph declared for the floating legend node")
 
 func _on_graph_legend_updated(labels:Array):
 	legend.update(labels)

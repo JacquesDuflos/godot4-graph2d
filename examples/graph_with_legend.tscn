@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://biwt7iw3xpnmj"]
+[gd_scene load_steps=4 format=3 uid="uid://desy7txx62pb2"]
 
 [ext_resource type="Script" path="res://examples/single_plot.gd" id="1_62wlx"]
 [ext_resource type="Script" path="res://addons/graph_2d/graph_2d.gd" id="2_y0q6u"]
-[ext_resource type="Script" path="res://addons/graph_2d/flowting_legend.gd" id="3_7par3"]
+[ext_resource type="Script" path="res://addons/graph_2d/floating_legend.gd" id="3_7par3"]
 
 [node name="SinglePlot" type="Control"]
 layout_mode = 3
@@ -26,6 +26,7 @@ x_label = "Time(s)"
 y_min = -53.0
 y_max = 50.0
 y_label = "Y"
+show_legend = false
 background_color = Color(0.0941176, 0.227451, 0.4, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
@@ -46,7 +47,7 @@ offset_right = 323.0
 offset_bottom = 59.0
 text = "Remove All Plots"
 
-[node name="FlowtingLegend" type="Control" parent="." node_paths=PackedStringArray("graph")]
+[node name="FloatingLegend" type="Control" parent="." node_paths=PackedStringArray("graph")]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 88.0
