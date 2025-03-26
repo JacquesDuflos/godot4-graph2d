@@ -24,7 +24,6 @@ x_label = "t[s]"
 y_min = -2.0
 y_max = 2.0
 y_label = "y"
-show_legend = null
 grid_horizontal_visible = true
 grid_vertical_visible = true
 metadata/_edit_layout_mode = 0

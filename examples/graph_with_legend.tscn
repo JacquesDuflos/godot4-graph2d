@@ -14,46 +14,41 @@ grow_vertical = 2
 script = ExtResource("1_62wlx")
 
 [node name="Graph2D" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 348.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_left = 282.0
+offset_right = 1141.0
+offset_bottom = 635.0
 script = ExtResource("2_y0q6u")
-x_label = "Time(s)"
+x_label = "X"
 y_min = -53.0
 y_max = 50.0
-y_label = "Y"
 show_legend = false
-background_color = Color(0.0941176, 0.227451, 0.4, 1)
+background_color = Color(0.280876, 0.373644, 0.701865, 1)
 grid_horizontal_visible = true
 grid_vertical_visible = true
 
 [node name="AddPlot" type="Button" parent="."]
 layout_mode = 0
-offset_left = 42.0
-offset_top = 29.0
-offset_right = 155.0
-offset_bottom = 60.0
+offset_left = 97.0
+offset_top = 37.0
+offset_right = 210.0
+offset_bottom = 68.0
 text = "Add New Plot"
 
 [node name="RemoveAllPlots" type="Button" parent="."]
 layout_mode = 0
-offset_left = 186.0
-offset_top = 28.0
-offset_right = 323.0
-offset_bottom = 59.0
+offset_left = 69.0
+offset_top = 98.0
+offset_right = 206.0
+offset_bottom = 129.0
 text = "Remove All Plots"
 
 [node name="FloatingLegend" type="Control" parent="." node_paths=PackedStringArray("graph")]
-layout_mode = 1
 anchors_preset = 0
-offset_left = 88.0
-offset_top = 124.0
-offset_right = 228.0
-offset_bottom = 246.0
+offset_left = 52.4538
+offset_top = 281.007
+offset_right = 92.4538
+offset_bottom = 321.007
 script = ExtResource("3_7par3")
 graph = NodePath("../Graph2D")
 

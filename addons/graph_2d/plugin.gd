@@ -13,7 +13,6 @@ func _enter_tree() -> void:
 					preload("res://addons/graph_2d/legend.svg"),
 					)
 
-
 func _exit_tree() -> void:
 	# Clean-up of the plugin goes here.
 	remove_custom_type("Graph2D")
