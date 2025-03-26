@@ -6,14 +6,7 @@ This repository contains the add-on and examples.
 
 ## Fork
 
-This fork is made to add the option of choosing freely the min and max of the axis.
-A boolean export value, named "rounded_number_of_steps_x", will be added to the graph object for each axis. If set to
-true, the behaviour will stay the same as the main add-on, except for it will print to the consol an explanation.
-If set to false, the min and max of the axix will be such as specified by the user.
-By default, this value will be set to true for the y axis, and to false for the x axis as it is commun to put the
-real-time as x axis.
-
-An example will be added where the x axis represent the las 5 seconds, and the y axis represent the value of a slider.
+This fork adds a custom node named FloatingLegend that displays the legend of a Graph2D. It is used when you don't want to show the legend inside the plot area, but display it somewhere else. A boolean parameter is added to Graph2D to not display the legend.
 
 ## Features
 
