@@ -30,7 +30,7 @@ var thickness: float = 1.0:
 var _curve : Plot2D
 var _LineCurve = preload("res://addons/graph_2d/custom_nodes/plot_2d.gd")
 var _points: PackedVector2Array
-var _graph
+var _graph:Graph2D
 
 
 func _init(obj, l, c, w, a):
@@ -79,16 +79,35 @@ func delete():
 
 func _redraw():
 	_curve.points_px.clear()
+	_curve.perimeters_px.clear()
+	var perimetre := AreaBeneathCurve.new()
+	var last_point : Vector2
 	var leftmost_point : Vector2
 	var rightmost_point : Vector2
 	for pt in _points:
-#			print_debug("Plot redraw %s" % pt)
+		#print_debug("Plot redraw %s" % pt)
 		if pt.x > _graph.x_max or pt.x < _graph.x_min: continue
 		
 		var point = pt.clamp(Vector2(_graph.x_min, _graph.y_min), Vector2(_graph.x_max, _graph.y_max))
-		var pt_px: Vector2
-		pt_px.x = remap(point.x, _graph.x_min, _graph.x_max, 0, _graph.get_node("PlotArea").size.x)
-		pt_px.y = remap(point.y, _graph.y_min, _graph.y_max, _graph.get_node("PlotArea").size.y, 0)
+		var pt_px: Vector2i
+		pt_px = _graph._coordinate_to_pixel(point)
+		if last_point :
+			# TODO : calculer l'integrale
+			if pt.y * last_point.y <= 0:
+				var intersect := Vector2(0, 0)
+				intersect.x = remap(
+					0,
+					last_point.y, pt.y,
+					last_point.x, pt.x,
+				)
+				intersect = _graph._coordinate_to_pixel(intersect)
+				perimetre.points.append(intersect)
+				_curve.perimeters_px.append(perimetre)
+				perimetre = AreaBeneathCurve.new()
+				perimetre.points.append(intersect)
+		perimetre.points.append(pt_px)
+		last_point = pt
+				
 		if leftmost_point:
 			if pt_px.x < leftmost_point.x :
 				leftmost_point = pt_px
@@ -100,12 +119,10 @@ func _redraw():
 		else :
 			rightmost_point = pt_px
 		_curve.points_px.append(pt_px)
-	#print("left most point : ", leftmost_point)
-	#print("right most point : ", rightmost_point)
 	var y0_px : float
 	y0_px = remap (0, _graph.y_min, _graph.y_max, _graph.get_node("PlotArea").size.y, 0)
 	y0_px = clamp(y0_px, 0, _graph.get_node("PlotArea").size.y)
-	_curve.perimeter_px = _curve.points_px.duplicate()
-	_curve.perimeter_px.append(Vector2(rightmost_point.x,y0_px))
-	_curve.perimeter_px.append(Vector2(leftmost_point.x,y0_px))
+	_curve.perimeters_px.append(perimetre)
+	_curve.perimeters_px[-1].points.append(Vector2(rightmost_point.x,y0_px))
+	_curve.perimeters_px[0].points.append(Vector2(leftmost_point.x,y0_px))
 	_curve.queue_redraw()

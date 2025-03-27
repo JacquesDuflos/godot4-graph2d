@@ -221,6 +221,14 @@ func _pixel_to_coordinate(px: Vector2i) -> Vector2:
 	point.y = remap(px.y, 0, get_node("PlotArea").size.y, y_max, y_min)
 	return point
 
+
+func _coordinate_to_pixel(coor: Vector2) -> Vector2i:
+	var point: Vector2
+	point.x = remap(coor.x, x_min, x_max, 0, get_node("PlotArea").size.x)
+	point.y = remap(coor.y, y_max, y_min, 0, get_node("PlotArea").size.y)
+	return point
+
+
 func _update_graph() -> void:
 	if get_node_or_null("Axis") == null: return
 	if get_node_or_null("Grid") == null: return

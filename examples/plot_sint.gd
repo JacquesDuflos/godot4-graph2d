@@ -10,7 +10,7 @@ var draw_enabled = false:
 #			$Graph2D.background_color = Color.SLATE_GRAY if draw_enabled else Color.BLACK
 
 func _ready():
-	plot_sin = $Graph2D.add_plot_item("Sin(x)", Color.RED, 0.5)
+	plot_sin = $Graph2D.add_plot_item("Sin(x)", Color.RED, 0.5, true)
 
 func _process(_delta):
 	if draw_enabled:

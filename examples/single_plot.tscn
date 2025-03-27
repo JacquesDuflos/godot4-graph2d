@@ -20,23 +20,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_2ul57")
-x_min = null
-x_max = null
 x_label = "Time(s)"
-show_x_ticks = null
-show_x_numbers = null
-show_horizontal_line = null
 y_min = -53.0
 y_max = 50.0
 y_label = "Y"
-show_y_ticks = null
-show_y_numbers = null
-show_vertical_line = null
 background_color = Color(0.0941176, 0.227451, 0.4, 1)
 grid_horizontal_visible = true
-grid_horizontal_color = null
 grid_vertical_visible = true
-grid_vertical_color = null
 
 [node name="AddPlot" type="Button" parent="."]
 layout_mode = 0
