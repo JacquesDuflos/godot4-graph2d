@@ -33,7 +33,7 @@ var _points: PackedVector2Array
 var _graph:Graph2D
 
 
-func _init(obj, l, c, w, a):
+func _init(obj, l, c, w, a, av):
 	_curve = _LineCurve.new()
 	_graph = obj
 	label = l
@@ -41,6 +41,7 @@ func _init(obj, l, c, w, a):
 	_curve.color = c
 	_curve.width = w
 	_curve.with_area = a
+	_curve.with_area_values = av
 	_graph.get_node("PlotArea").add_child(_curve)
 
 
@@ -97,22 +98,36 @@ func _redraw():
 		if last_point :
 			# TODO : enregistrer les extrema pour les polygon, pour positionner
 			# le texte.
-			if pt.y * last_point.y <= 0:
+			if pt.y * last_point.y <= 0: # if y=0 crossed
 				var intersect := Vector2(0, 0)
 				intersect.x = remap(
-					0,
-					last_point.y, point.y,
-					last_point.x, point.x,
+						0,
+						last_point.y, point.y,
+						last_point.x, point.x,
 				)
 				perimetre.area += integrate(last_point, intersect)
 				var intersect_px := _graph._coordinate_to_pixel(intersect)
+				perimetre.boundaries = _update_boundaries(
+						perimetre.boundaries, intersect_px
+				)
 				perimetre.points.append(intersect_px)
 				_curve.perimeters_px.append(perimetre)
 				perimetre = AreaBeneathCurve.new()
 				perimetre.points.append(intersect_px)
 				perimetre.area += integrate(intersect, point)
+				perimetre.boundaries.position = intersect_px
+				perimetre.boundaries.end = intersect_px
+				perimetre.boundaries = _update_boundaries(
+						perimetre.boundaries, pt_px
+				)
 			else :
+				perimetre.boundaries = _update_boundaries(
+						perimetre.boundaries, pt_px
+				)
 				perimetre.area += integrate(last_point, point)
+		else : # then if it is the first point inside the ploting area
+			perimetre.boundaries.position = pt_px
+			perimetre.boundaries.end = pt_px
 		perimetre.points.append(pt_px)
 		last_point = pt
 				
@@ -138,3 +153,16 @@ func _redraw():
 
 func integrate(from : Vector2, to : Vector2) -> float:
 	return (from.y + to.y) / 2 * (to.x - from.x)
+
+
+func _update_boundaries(old_rec : Rect2i, new_point : Vector2i) -> Rect2i:
+	var new_rec: Rect2i
+	new_rec.position = (Vector2i(
+			min(old_rec.position.x, new_point.x),
+			min(old_rec.position.y, new_point.y),
+	))
+	new_rec.end = (Vector2i(
+			max(old_rec.end.x, new_point.x),
+			max(old_rec.end.y, new_point.y),
+	))
+	return new_rec

@@ -9,8 +9,10 @@ var draw_enabled = false:
 #		if is_instance_valid($Graph2D):
 #			$Graph2D.background_color = Color.SLATE_GRAY if draw_enabled else Color.BLACK
 
+
 func _ready():
-	plot_sin = $Graph2D.add_plot_item("Sin(x)", Color.RED, 0.5, true)
+	plot_sin = $Graph2D.add_plot_item("Sin(x)", Color.RED, 0.5, true, true)
+
 
 func _process(_delta):
 	if draw_enabled:
@@ -20,6 +22,7 @@ func _process(_delta):
 	
 	if draw_enabled and x > $Graph2D.x_max:
 		draw_enabled = false
+
 
 func _on_draw_button_pressed() -> void:
 	draw_enabled = true

@@ -5,7 +5,7 @@ func _on_add_plot_pressed() -> void:
 			"Plot %d" % [$Graph2D.count()],
 			[Color.RED, Color.GREEN, Color.BLUE][$Graph2D.count() % 3],
 			[1.0, 3.0, 5.0].pick_random(),
-			true
+			true, true
 			)
 
 	for x in range(0, 11, 1):

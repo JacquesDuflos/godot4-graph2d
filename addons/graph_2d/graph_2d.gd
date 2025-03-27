@@ -190,8 +190,11 @@ func _input(event: InputEvent) -> void:
 			get_node("PlotArea/Coordinate").text = "(%.3f, %.3f)" % [point.x, point.y]
 
 ## Add plot to the graph and return an instance of plot.
-func add_plot_item(label = "", color = Color.WHITE, width = 1.0, with_area = false) -> PlotItem:
-	var plot = PlotItem.new(self, label, color, width, with_area)
+func add_plot_item(
+			label = "", color = Color.WHITE, width = 1.0,
+			with_area = false, with_area_values = false
+	) -> PlotItem:
+	var plot = PlotItem.new(self, label, color, width, with_area, with_area_values)
 	_plots.append(plot)
 	_update_legend()
 	return plot

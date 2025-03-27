@@ -4,6 +4,7 @@ class_name Plot2D
 
 var points_px := PackedVector2Array([])
 var with_area : bool
+var with_area_values : bool
 var perimeters_px : Array[AreaBeneathCurve]
 var color: Color = Color.WHITE
 var color_area: Color
@@ -27,7 +28,11 @@ func _draw_polygons():
 	color_area.a = 0.2
 	for poligon in perimeters_px:
 		draw_colored_polygon(poligon.points,color_area)
+		if not with_area_values : continue
 		var area_label := Label.new()
-		area_label.position = poligon.points[0]
+		area_label.add_theme_color_override("font_color", color)
+		area_label.position = (
+				poligon.boundaries.get_center() - Vector2i(area_label.size/2)
+		)
 		area_label.text = "%0.1f" % poligon.area
 		add_child(area_label) 
