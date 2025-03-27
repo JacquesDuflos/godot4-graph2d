@@ -88,7 +88,10 @@ func _redraw():
 		#print_debug("Plot redraw %s" % pt)
 		if pt.x > _graph.x_max or pt.x < _graph.x_min: continue
 		
-		var point = pt.clamp(Vector2(_graph.x_min, _graph.y_min), Vector2(_graph.x_max, _graph.y_max))
+		var point : Vector2 = pt.clamp(
+			Vector2(_graph.x_min, _graph.y_min),
+			Vector2(_graph.x_max, _graph.y_max),
+			)
 		var pt_px: Vector2i
 		pt_px = _graph._coordinate_to_pixel(point)
 		if last_point :
@@ -97,14 +100,18 @@ func _redraw():
 				var intersect := Vector2(0, 0)
 				intersect.x = remap(
 					0,
-					last_point.y, pt.y,
-					last_point.x, pt.x,
+					last_point.y, point.y,
+					last_point.x, point.x,
 				)
-				intersect = _graph._coordinate_to_pixel(intersect)
-				perimetre.points.append(intersect)
+				perimetre.area += integrate(last_point, intersect)
+				var intersect_px := _graph._coordinate_to_pixel(intersect)
+				perimetre.points.append(intersect_px)
 				_curve.perimeters_px.append(perimetre)
 				perimetre = AreaBeneathCurve.new()
-				perimetre.points.append(intersect)
+				perimetre.points.append(intersect_px)
+				perimetre.area += integrate(intersect, point)
+			else :
+				perimetre.area += integrate(last_point, point)
 		perimetre.points.append(pt_px)
 		last_point = pt
 				
@@ -126,3 +133,7 @@ func _redraw():
 	_curve.perimeters_px[-1].points.append(Vector2(rightmost_point.x,y0_px))
 	_curve.perimeters_px[0].points.append(Vector2(leftmost_point.x,y0_px))
 	_curve.queue_redraw()
+
+
+func integrate(from : Vector2, to : Vector2) -> float:
+	return (from.y + to.y) / 2 * (to.x - from.x)
