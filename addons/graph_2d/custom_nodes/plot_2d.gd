@@ -11,6 +11,8 @@ var width: float = 1.0
 
 
 func _draw() -> void:
+	for child in get_children():
+		child.free()
 	_draw_polyline()
 	_draw_polygons()
 
@@ -25,3 +27,7 @@ func _draw_polygons():
 	color_area.a = 0.2
 	for poligon in perimeters_px:
 		draw_colored_polygon(poligon.points,color_area)
+		var area_label := Label.new()
+		area_label.position = poligon.points[0]
+		area_label.text = "%0.1f" % poligon.area
+		add_child(area_label) 

@@ -95,7 +95,8 @@ func _redraw():
 		var pt_px: Vector2i
 		pt_px = _graph._coordinate_to_pixel(point)
 		if last_point :
-			# TODO : calculer l'integrale
+			# TODO : enregistrer les extrema pour les polygon, pour positionner
+			# le texte.
 			if pt.y * last_point.y <= 0:
 				var intersect := Vector2(0, 0)
 				intersect.x = remap(
