@@ -39,6 +39,7 @@ func _init(obj, l, c, w, a, av):
 	label = l
 	_curve.name = l
 	_curve.color = c
+	color = c
 	_curve.width = w
 	_curve.with_area = a
 	_curve.with_area_values = av
