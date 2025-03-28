@@ -222,8 +222,11 @@ func _input(event: InputEvent) -> void:
 			get_node("PlotArea/Coordinate").text = "(%.3f, %.3f)" % [point.x, point.y]
 
 ## Add plot to the graph and return an instance of plot.
-func add_plot_item(label = "", color = Color.WHITE, width = 1.0, with_area = false) -> PlotItem:
-	var plot = PlotItem.new(self, label, color, width, with_area)
+func add_plot_item(
+			label = "", color = Color.WHITE, width = 1.0,
+			with_area = false, with_area_values = false
+	) -> PlotItem:
+	var plot = PlotItem.new(self, label, color, width, with_area, with_area_values)
 	_plots.append(plot)
 	_update_legend()
 	return plot
@@ -252,6 +255,14 @@ func _pixel_to_coordinate(px: Vector2i) -> Vector2:
 	point.x = remap(px.x, 0, get_node("PlotArea").size.x, x_min, x_max)
 	point.y = remap(px.y, 0, get_node("PlotArea").size.y, y_max, y_min)
 	return point
+
+
+func _coordinate_to_pixel(coor: Vector2) -> Vector2i:
+	var point: Vector2
+	point.x = remap(coor.x, x_min, x_max, 0, get_node("PlotArea").size.x)
+	point.y = remap(coor.y, y_max, y_min, 0, get_node("PlotArea").size.y)
+	return point
+
 
 func _update_graph() -> void:
 	if get_node_or_null("Axis") == null: return
