@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="Graph2D Addon"
-config/features=PackedStringArray("4.2")
+run/main_scene="uid://br4viqfrbdlpe"
+config/features=PackedStringArray("4.5")
 config/icon="res://icon.png"
 
 [editor_plugins]
