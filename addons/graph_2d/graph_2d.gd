@@ -149,6 +149,15 @@ extends Control
 
 #endregion
 
+#region Public variables
+var background : ColorRect
+var plot_area : Control
+var axis : Control
+var grid : Control
+var legend : Control
+var coordinate : Control
+#endregion
+
 #region Private variables
 
 const _MARGIN_TOP = 30
@@ -171,14 +180,14 @@ signal legend_updated
 #endregion
 
 func _ready():
-	var background = ColorRect.new()
+	background = ColorRect.new()
 	background.name = "Background"
 	background.color = background_color
 	background.anchor_right = 1.0
 	background.anchor_bottom = 1.0
 	add_child(background)
 	
-	var plot_area = Control.new()
+	plot_area = Control.new()
 	
 	plot_area.name = "PlotArea"
 	plot_area.anchor_right = 1.0
@@ -189,16 +198,16 @@ func _ready():
 	plot_area.offset_bottom = -_MARGIN_BOTTOM
 	add_child(plot_area)
 	
-	var axis = _Graph2DAxis.new()
+	axis = _Graph2DAxis.new()
 	add_child(axis)
 	
-	var grid = _Graph2DGrid.new()
+	grid = _Graph2DGrid.new()
 	add_child(grid)
 	
-	var legend = _Graph2DLegend.new()
+	legend = _Graph2DLegend.new()
 	plot_area.add_child(legend)
 	
-	var coordinate = _Graph2DCoord.new()
+	coordinate = _Graph2DCoord.new()
 	plot_area.add_child(coordinate)
 	
 	resized.connect(_on_Graph_resized)
@@ -214,12 +223,12 @@ func _ready():
 func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion:
-		var plot_rect: Rect2 = Rect2(Vector2.ZERO, get_node("PlotArea").size)
+		var plot_rect: Rect2 = Rect2(Vector2.ZERO, plot_area.size)
 		
-		if plot_rect.has_point(get_node("PlotArea").get_local_mouse_position()):
-			var pos: Vector2i = get_node("PlotArea").get_local_mouse_position()
+		if plot_rect.has_point(plot_area.get_local_mouse_position()):
+			var pos: Vector2i = plot_area.get_local_mouse_position()
 			var point = _pixel_to_coordinate(pos)
-			get_node("PlotArea/Coordinate").text = "(%.3f, %.3f)" % [point.x, point.y]
+			coordinate.text = "(%.3f, %.3f)" % [point.x, point.y]
 
 ## Add plot to the graph and return an instance of plot.
 func add_plot_item(
@@ -252,39 +261,39 @@ func count() -> int:
 
 func _pixel_to_coordinate(px: Vector2i) -> Vector2:
 	var point: Vector2
-	point.x = remap(px.x, 0, get_node("PlotArea").size.x, x_min, x_max)
-	point.y = remap(px.y, 0, get_node("PlotArea").size.y, y_max, y_min)
+	point.x = remap(px.x, 0, plot_area.size.x, x_min, x_max)
+	point.y = remap(px.y, 0, plot_area.size.y, y_max, y_min)
 	return point
 
 
 func _coordinate_to_pixel(coor: Vector2) -> Vector2i:
 	var point: Vector2
-	point.x = remap(coor.x, x_min, x_max, 0, get_node("PlotArea").size.x)
-	point.y = remap(coor.y, y_max, y_min, 0, get_node("PlotArea").size.y)
+	point.x = remap(coor.x, x_min, x_max, 0, plot_area.size.x)
+	point.y = remap(coor.y, y_max, y_min, 0, plot_area.size.y)
 	return point
 
 
 func _update_graph() -> void:
-	if get_node_or_null("Axis") == null: return
-	if get_node_or_null("Grid") == null: return
-	if get_node_or_null("PlotArea") == null: return
+	if not axis : return
+	if not grid : return
+	if not plot_area : return
 	
 	# Update margins depend of axis labels
-	get_node("Axis").x_label = x_label
-	get_node("Axis").y_label = y_label
-	get_node("Axis").show_x_ticks = show_x_ticks
-	get_node("Axis").show_x_numbers = show_x_numbers
-	get_node("Axis").show_horizontal_line = show_horizontal_line
-	get_node("Axis").show_y_ticks = show_y_ticks
-	get_node("Axis").show_y_numbers = show_y_numbers
-	get_node("Axis").show_vertical_line = show_vertical_line
-	get_node("Grid").grid_horizontal_color = grid_horizontal_color
-	get_node("Grid").grid_vertical_color= grid_vertical_color
-	var margin_left: float = _MARGIN_LEFT if get_node("Axis").y_label == "" else _MARGIN_LEFT + 20
-	var margin_bottom: float = _MARGIN_BOTTOM if get_node("Axis").x_label == "" else _MARGIN_BOTTOM + 20
+	axis.x_label = x_label
+	axis.y_label = y_label
+	axis.show_x_ticks = show_x_ticks
+	axis.show_x_numbers = show_x_numbers
+	axis.show_horizontal_line = show_horizontal_line
+	axis.show_y_ticks = show_y_ticks
+	axis.show_y_numbers = show_y_numbers
+	axis.show_vertical_line = show_vertical_line
+	grid.grid_horizontal_color = grid_horizontal_color
+	grid.grid_vertical_color= grid_vertical_color
+	var margin_left: float = _MARGIN_LEFT if axis.y_label == "" else _MARGIN_LEFT + 20
+	var margin_bottom: float = _MARGIN_BOTTOM if axis.x_label == "" else _MARGIN_BOTTOM + 20
 	
-	get_node("PlotArea").offset_left = margin_left
-	get_node("PlotArea").offset_bottom = -margin_bottom
+	plot_area.offset_left = margin_left
+	plot_area.offset_bottom = -margin_bottom
 	
 	# Vertical Graduation
 	var y_axis_range: float = y_max - y_min
@@ -353,12 +362,12 @@ func _update_graph() -> void:
 				grid_px.append(Vector2(grad_px.x + area_width, grad_px.y))
 				hor_grid.append(grid_px)
 		vert_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
-	get_node("Axis").vert_grad = vert_grad
+	axis.vert_grad = vert_grad
 	
 	if grid_horizontal_visible:
-		get_node("Grid").hor_grid = hor_grid
+		grid.hor_grid = hor_grid
 	else:
-		get_node("Grid").hor_grid = []
+		grid.hor_grid = []
 		
 	var hor_grad: Array
 	var vert_grid: Array
@@ -399,15 +408,15 @@ func _update_graph() -> void:
 				vert_grid.append(grid_px)
 		hor_grad.append([Vector2(margin_left+area_width,_MARGIN_TOP + area_height), ""])
 	
-	get_node("Axis").hor_grad = hor_grad
+	axis.hor_grad = hor_grad
 	
 	if grid_vertical_visible:
-		get_node("Grid").vert_grid = vert_grid
+		grid.vert_grid = vert_grid
 	else:
-		get_node("Grid").vert_grid = []
+		grid.vert_grid = []
 	
-	get_node("Axis").queue_redraw()
-	get_node("Grid").queue_redraw()
+	axis.queue_redraw()
+	grid.queue_redraw()
 	
 func _update_plots():
 	for plot in _plots:
@@ -422,9 +431,9 @@ func _update_legend() -> void:
 			color = p.color,
 		})
 	if show_legend:
-		get_node("PlotArea/Legend").update(labels)
+		legend.update(labels)
 	else :
-		get_node("PlotArea/Legend").update([])
+		legend.update([])
 	legend_updated.emit(labels)
 
 func _on_Graph_resized() -> void:

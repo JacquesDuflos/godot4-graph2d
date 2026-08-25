@@ -17,6 +17,7 @@ func _draw() -> void:
 	_draw_polyline()
 	_draw_polygons()
 
+
 func _draw_polyline():
 	if points_px.size() <= 1: return
 	draw_polyline(points_px, color, width, true)
