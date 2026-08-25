@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dujayijqsfl0k"]
+[gd_scene load_steps=3 format=3 uid="uid://gmlvre5085p1"]
 
 [ext_resource type="Script" path="res://examples/real_time_plot.gd" id="1_apgog"]
 [ext_resource type="Script" path="res://addons/graph_2d/graph_2d.gd" id="2_bcgdy"]
@@ -23,8 +23,8 @@ grow_vertical = 2
 script = ExtResource("2_bcgdy")
 x_max = 5.0
 x_label = "seconds"
-y_min = -11.0
-y_max = 110.0
+y_min = -50.0
+y_max = 52.0
 y_label = "%"
 grid_horizontal_visible = true
 grid_vertical_visible = true
@@ -35,4 +35,6 @@ offset_left = 1084.0
 offset_top = 42.0
 offset_right = 1100.0
 offset_bottom = 613.0
+min_value = -50.0
+max_value = 50.0
 value = 50.0
