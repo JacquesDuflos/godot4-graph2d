@@ -18,8 +18,8 @@ var show_x_numbers: bool
 var show_y_numbers: bool
 var show_vertical_line: bool
 var show_horizontal_line: bool
-var x_color : Color
-var y_color : Color
+var x_color : Color = Color.WHITE
+var y_color : Color = Color.WHITE
 
 
 func _ready():

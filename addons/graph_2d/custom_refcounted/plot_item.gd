@@ -68,6 +68,7 @@ func remove_point(pt: Vector2):
 func remove_all():
 	_points.clear()
 	_curve.points_px.clear()
+	_curve.perimeters_px.clear()
 	_curve.queue_redraw()
 
 
