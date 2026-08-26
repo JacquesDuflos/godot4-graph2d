@@ -38,9 +38,6 @@ func _init(obj, l, c, w, a, av):
 	_graph = obj
 	label = l
 	_curve.name = l
-	## TODO : l'une des deux lignes suivantes est redondante avec une autre partie
-	## du code et empeche de changer la couleur des courbes je crois.
-	_curve.color = c
 	color = c
 	_curve.width = w
 	_curve.with_area = a

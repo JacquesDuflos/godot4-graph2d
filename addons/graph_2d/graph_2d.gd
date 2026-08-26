@@ -369,6 +369,8 @@ func _update_graph() -> void:
 		vert_grad.append([Vector2(margin_left,_MARGIN_TOP + area_height), ""])
 	axis.vert_grad = vert_grad
 	
+	grid.grid_horizontal_color = y_color
+	grid.grid_horizontal_color.a = 0.3
 	if grid_horizontal_visible:
 		grid.hor_grid = hor_grid
 	else:
@@ -415,6 +417,8 @@ func _update_graph() -> void:
 	
 	axis.hor_grad = hor_grad
 	
+	grid.grid_vertical_color = x_color
+	grid.grid_vertical_color.a = 0.3
 	if grid_vertical_visible:
 		grid.vert_grid = vert_grid
 	else:
