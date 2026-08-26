@@ -8,8 +8,9 @@ extends Control
 ## To add points to the plot, call the [method PlotItem.add_point].
 
 #region Export variables
-
 @export_group("X Axis")
+## The color of the x axis and texts
+@export var x_color : Color = Color.WHITE
 ## Rounds the X extrema to guarentee a rounded number of steps and alined to 
 ## the y axis
 @export var rounded_number_of_steps_x := false:
@@ -61,6 +62,8 @@ extends Control
 		_update_graph()
 
 @export_group("Y Axis")
+## The color of the y axis and texts
+@export var y_color : Color = Color.WHITE
 ## Rounds the Y extrema to guarentee a rounded number of steps and alined to 
 ## the x axis
 @export var rounded_number_of_steps_y := true:
@@ -199,6 +202,8 @@ func _ready():
 	add_child(plot_area)
 	
 	axis = _Graph2DAxis.new()
+	axis.x_color = x_color
+	axis.y_color = y_color
 	add_child(axis)
 	
 	grid = _Graph2DGrid.new()
