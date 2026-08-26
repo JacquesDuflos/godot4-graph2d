@@ -18,6 +18,10 @@ var show_x_numbers: bool
 var show_y_numbers: bool
 var show_vertical_line: bool
 var show_horizontal_line: bool
+## 0 : bottom ; 1 : top ; 2 : floating
+var x_axis_pos : int
+## 0 : left ; 1 : right ; 2 : floating
+var y_axis_pos : int
 var x_color : Color = Color.WHITE
 var y_color : Color = Color.WHITE
 var zero_px : Vector2i
@@ -41,8 +45,22 @@ func _draw() -> void:
 	var topleft: Vector2 = vert_grad.front()[POINT]
 	var topright: Vector2 = Vector2(hor_grad.back()[POINT].x, vert_grad.front()[POINT].y)
 	var bottomright: Vector2 = hor_grad.back()[POINT]
-	var zero_x : int = clamp(zero_px.x, topleft.x, topright.x)
-	var zero_y : int = clamp(zero_px.y, topleft.y, bottomright.y)
+	var zero_x : int
+	if y_axis_pos == 0 :
+		zero_x = topleft.x
+	if y_axis_pos == 1 :
+		zero_x = topright.x
+	if y_axis_pos == 2 :
+		zero_x = clamp(zero_px.x, topleft.x, topright.x)
+	
+	var zero_y : int
+	if x_axis_pos == 0 :
+		zero_y = topleft.y
+	if x_axis_pos == 1 :
+		zero_y= bottomright.y
+	if x_axis_pos == 2 :
+		zero_y = clamp(zero_px.y, topleft.y, bottomright.y)
+	
 	#draw_circle(zero_px, 10, Color.REBECCA_PURPLE)
 	if show_x_ticks:
 		for grad in hor_grad:

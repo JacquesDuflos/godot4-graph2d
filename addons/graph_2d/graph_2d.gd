@@ -11,6 +11,10 @@ extends Control
 @export_group("X Axis")
 ## The color of the x axis and texts
 @export var x_color : Color = Color.WHITE
+## The position of the x axis. If TOP or BOTTOM, the axis will always be at
+## top or bottom of the graph. If FLOATING, the axis will be align to the zero
+## x value if possible.
+@export_enum("BOTTOM","TOP","FLOATING") var x_axis_pos = 2
 ## Rounds the X extrema to guarentee a rounded number of steps and alined to 
 ## the y axis
 @export var rounded_number_of_steps_x := false:
@@ -64,6 +68,10 @@ extends Control
 @export_group("Y Axis")
 ## The color of the y axis and texts
 @export var y_color : Color = Color.WHITE
+## The position of the y axis. If LEFT or RIGHT, the axis will always be at
+## right or left of the graph. If FLOATING, the axis will be align to the zero
+## y value if possible.
+@export_enum("LEFT","RIGHT","FLOATING") var y_axis_pos = 2
 ## Rounds the Y extrema to guarentee a rounded number of steps and alined to 
 ## the x axis
 @export var rounded_number_of_steps_y := true:
@@ -299,6 +307,8 @@ func _update_graph() -> void:
 	axis.show_y_numbers = show_y_numbers
 	axis.show_vertical_line = show_vertical_line
 	axis.zero_px = _coordinate_to_pixel(Vector2.ZERO) + Vector2i(margin_left,margin_bottom)
+	axis.x_axis_pos = x_axis_pos
+	axis.y_axis_pos = y_axis_pos
 	grid.grid_horizontal_color = grid_horizontal_color
 	grid.grid_vertical_color= grid_vertical_color
 	# Vertical Graduation
