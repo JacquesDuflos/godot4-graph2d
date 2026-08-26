@@ -20,6 +20,7 @@ var show_vertical_line: bool
 var show_horizontal_line: bool
 var x_color : Color = Color.WHITE
 var y_color : Color = Color.WHITE
+var zero_px : Vector2i
 
 
 func _ready():
@@ -40,16 +41,20 @@ func _draw() -> void:
 	var topleft: Vector2 = vert_grad.front()[POINT]
 	var topright: Vector2 = Vector2(hor_grad.back()[POINT].x, vert_grad.front()[POINT].y)
 	var bottomright: Vector2 = hor_grad.back()[POINT]
-	
+	var zero_x : int = clamp(zero_px.x, topleft.x, topright.x)
+	var zero_y : int = clamp(zero_px.y, topleft.y, bottomright.y)
+	#draw_circle(zero_px, 10, Color.REBECCA_PURPLE)
 	if show_x_ticks:
-		for grad in hor_grad: 
-			draw_line(grad[POINT], grad[POINT] + Vector2(0, 10), x_color)
+		for grad in hor_grad:
+			var _starting_point : Vector2 = Vector2(grad[POINT].x, zero_y)
+			draw_line(_starting_point, _starting_point + Vector2(0, 10), x_color)
 	
 	if show_x_numbers:
 		for grad in hor_grad:
+			var _starting_point : Vector2 = Vector2(grad[POINT].x, zero_y)
 			draw_string(
 					default_font,
-					grad[POINT] + Vector2(0, 20),
+					_starting_point + Vector2(0, 20),
 					grad[LABEL],
 					HORIZONTAL_ALIGNMENT_LEFT,
 					-1,
@@ -58,26 +63,28 @@ func _draw() -> void:
 			)
 	
 	if show_horizontal_line == true:
-		draw_line(hor_grad.front()[POINT], hor_grad.back()[POINT], x_color)
+		draw_line(Vector2(topleft.x, zero_y), Vector2(topright.x, zero_y), x_color)
 
 	if show_y_ticks == true:
 		for grad in vert_grad:
-			draw_line(grad[POINT], grad[POINT] - Vector2(10, 0), y_color)
+			var _starting_point : Vector2 = Vector2(zero_x, grad[POINT].y)
+			draw_line(_starting_point, _starting_point - Vector2(10, 0), y_color)
 	
 	if show_y_numbers == true:
 		for grad in vert_grad:
+			var _starting_point : Vector2 = Vector2(zero_x, grad[POINT].y)
 			draw_string(
 					default_font,
-					grad[0] + Vector2(-35, -5),
-					grad[1],
+					_starting_point + Vector2(-35, -5),
+					grad[LABEL],
 					HORIZONTAL_ALIGNMENT_LEFT,
 					-1,
 					16,
 					y_color,
 			)
-		
+
 	if show_vertical_line == true:
-		draw_line(topleft, vert_grad.back()[POINT], y_color)
+		draw_line(Vector2(zero_x, topleft.y), Vector2(zero_x, bottomright.y), y_color)
 
 	get_node("XLabel").text = x_label
 	get_node("YLabel").text = y_label 

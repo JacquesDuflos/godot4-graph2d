@@ -283,6 +283,12 @@ func _update_graph() -> void:
 	if not grid : return
 	if not plot_area : return
 	
+	var margin_left: float = _MARGIN_LEFT if axis.y_label == "" else _MARGIN_LEFT + 20
+	var margin_bottom: float = _MARGIN_BOTTOM if axis.x_label == "" else _MARGIN_BOTTOM + 20
+	
+	plot_area.offset_left = margin_left
+	plot_area.offset_bottom = -margin_bottom
+	
 	# Update margins depend of axis labels
 	axis.x_label = x_label
 	axis.y_label = y_label
@@ -292,14 +298,9 @@ func _update_graph() -> void:
 	axis.show_y_ticks = show_y_ticks
 	axis.show_y_numbers = show_y_numbers
 	axis.show_vertical_line = show_vertical_line
+	axis.zero_px = _coordinate_to_pixel(Vector2.ZERO) + Vector2i(margin_left,margin_bottom)
 	grid.grid_horizontal_color = grid_horizontal_color
 	grid.grid_vertical_color= grid_vertical_color
-	var margin_left: float = _MARGIN_LEFT if axis.y_label == "" else _MARGIN_LEFT + 20
-	var margin_bottom: float = _MARGIN_BOTTOM if axis.x_label == "" else _MARGIN_BOTTOM + 20
-	
-	plot_area.offset_left = margin_left
-	plot_area.offset_bottom = -margin_bottom
-	
 	# Vertical Graduation
 	var y_axis_range: float = y_max - y_min
 	
