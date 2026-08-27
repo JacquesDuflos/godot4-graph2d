@@ -167,6 +167,7 @@ var axis : Control
 var grid : Control
 var legend : Control
 var coordinate : Control
+var cursor : PlotCursor
 #endregion
 
 #region Private variables
@@ -185,6 +186,9 @@ var _plots: Array
 
 var _x_step: float
 var _y_step: float
+
+var mouse_px : Vector2
+var mouse_coor : Vector2
 
 signal legend_updated
 
@@ -223,6 +227,9 @@ func _ready():
 	coordinate = _Graph2DCoord.new()
 	plot_area.add_child(coordinate)
 	
+	cursor = PlotCursor.new()
+	plot_area.add_child(cursor)
+	
 	resized.connect(_on_Graph_resized)
 	plot_area.resized.connect(_on_plot_area_resized)
 
@@ -233,15 +240,18 @@ func _ready():
 	
 	_update_graph()
 
+
 func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion:
 		var plot_rect: Rect2 = Rect2(Vector2.ZERO, plot_area.size)
 		
 		if plot_rect.has_point(plot_area.get_local_mouse_position()):
-			var pos: Vector2i = plot_area.get_local_mouse_position()
-			var point = _pixel_to_coordinate(pos)
-			coordinate.text = "(%.3f, %.3f)" % [point.x, point.y]
+			mouse_px = plot_area.get_local_mouse_position()
+			mouse_coor = _pixel_to_coordinate(mouse_px)
+			coordinate.text = "(%.3f, %.3f)" % [mouse_coor.x, mouse_coor.y]
+			cursor.queue_redraw()
+
 
 ## Add plot to the graph and return an instance of plot.
 func add_plot_item(
