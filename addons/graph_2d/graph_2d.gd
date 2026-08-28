@@ -64,6 +64,13 @@ extends Control
 	set(value):
 		show_horizontal_line = value
 		_update_graph()
+## Shows the vertical line passing through the mouse
+@export var show_vertical_curser : bool = true
+## The extend of the vertical curser.
+## THROUGH ALL : the curser will spread through all the graph area
+## MOUSE TO ZERO : the curser will start at the mouse position and end at the
+## y = 0 line
+@export_enum("Through all", "Mouse to zero") var vertical_curser_extend : int = 0
 
 @export_group("Y Axis")
 ## The color of the y axis and texts
@@ -104,7 +111,6 @@ extends Control
 #			print_debug("y_max: ", y_max)
 			_update_graph()
 			_update_plots()
-
 ## Lable of Y-axis
 @export var y_label: String = "":
 	set(value):
@@ -125,7 +131,14 @@ extends Control
 	set(value):
 		show_vertical_line = value
 		_update_graph()
-		
+## Shows the horizontal line passing through the mouse
+@export var show_horizontal_curser : bool = true
+## The extend of the horizontal curser.
+## THROUGH ALL : the curser will spread through all the graph area
+## MOUSE TO ZERO : the curser will start at the mouse position and end at the
+## x = 0 line
+@export_enum("Through all", "Mouse to zero") var horizontal_curser_extend : int = 0
+
 @export_group("Background")
 ## Show legend on graph
 @export var show_legend := true:
