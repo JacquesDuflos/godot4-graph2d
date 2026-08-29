@@ -21,6 +21,7 @@ func _draw() -> void:
 	#draw_circle(graph.mouse_px, 20, Color.AQUA)
 	draw_horizontal_cursor()
 	draw_vertical_cursor()
+	draw_plot_intersection()
 
 
 func draw_vertical_cursor():
@@ -62,3 +63,20 @@ func draw_horizontal_cursor():
 	y_label.text = "%.3f" % [graph.mouse_coor.y]
 	y_label.show()
 	
+
+func draw_plot_intersection():
+	for plot:PlotItem in graph._plots:
+		for i:int in plot._curve.points_px.size()-1:
+			var intersect : Vector2
+			if ((plot._curve.points_px[i].x <= graph.mouse_px.x) ==
+					(plot._curve.points_px[i+1].x > graph.mouse_px.x)) :
+				intersect = Vector2(graph.mouse_px.x, remap(
+						graph.mouse_px.x,
+						plot._curve.points_px[i].x, plot._curve.points_px[i+1].x,
+						plot._curve.points_px[i].y, plot._curve.points_px[i+1].y))
+				draw_circle(
+						intersect,
+						20,
+						plot._curve.color
+				)
+				
